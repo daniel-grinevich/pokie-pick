@@ -64,10 +64,10 @@ async function GetPokemonVote() {
 async function handleVote(formData: FormData) {
   "use server";
 
-  const winner_name = formData.get("winner_name");
-  const loser_name = formData.get("loser_name");
-  const winner_id = formData.get("winner_id");
-  const loser_id = formData.get("loser_id");
+  const winner_name = formData.get("winner_name") as string;
+  const loser_name = formData.get("loser_name") as string;
+  const winner_id = formData.get("winner_id")! as any as number;
+  const loser_id = formData.get("loser_id")! as any as number;
 
   const payload = {
     winner_id: winner_id,
