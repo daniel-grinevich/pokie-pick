@@ -27,35 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-          <nav className="flex flex-row p-3 items-center border-b border-black">
-            <div className="">
-              <Link href="/" prefetch={true}>
-                <h1 className="text-xl">Traveled The World</h1>
-              </Link>
-            </div>
-            <div className="flex flex-grow justify-center mx-8">
-              <input 
-                className="h-9 max-w-xl flex-grow border border-gray-500 bg-transparent px-3 py-1 text-sm outline-none"
-                placeholder="Search..."
-              />
-            </div>
-            <div>
-              <ul className="flex flex-row p-3 gap-3">
-                <li>Login</li>
-                <li className="font-semibold">Sign Up</li>
-              </ul>
-            </div>
-          </nav>
-          <div>{children}</div>
-          <footer className="fixed bottom-0 w-full border-t border-black">
-            <div className="px-3">
-              <ul className="flex flex-row gap-3">
-                <li>Home</li>
-                <li>About</li>
-                <li>Contact</li>
-              </ul>
-            </div>
-          </footer>
+        {children}
       </body>
     </html>
   );
