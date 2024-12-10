@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@upstash/redis": "^1.34.3",
     "next": "^15.0.4-canary.48",
     "react": "latest",
     "react-dom": "latest"

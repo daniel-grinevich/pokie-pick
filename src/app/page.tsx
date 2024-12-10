@@ -66,8 +66,8 @@ async function handleVote(formData: FormData) {
 
   const winner_name = formData.get("winner_name") as string;
   const loser_name = formData.get("loser_name") as string;
-  const winner_id = formData.get("winner_id")! as any as number;
-  const loser_id = formData.get("loser_id")! as any as number;
+  const winner_id = formData.get("winner_id")! as string;
+  const loser_id = formData.get("loser_id")! as string;
 
   const payload = {
     winner_id: winner_id,
