@@ -1,15 +1,20 @@
+import "server-only";
+import { unstable_cacheLife } from "next/cache";
+
 interface Pokemon {
     name: string;
     url: string;
 }
 
 export async function getPokemonData(pokemon: Pokemon): Promise<any> {
+  "use cache";
+  unstable_cacheLife("forever");
+
     const response = await fetch(pokemon.url, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
-        next: { revalidate: 86400 },
     });
   
     if (!response.ok) {
@@ -23,22 +28,23 @@ export async function getPokemonData(pokemon: Pokemon): Promise<any> {
   }
 
 export async function getAllPokemon(): Promise<Pokemon[]> {
-    const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=810', { 
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        next: { revalidate: 86400 },
-    });
+  "use cache";
+  unstable_cacheLife("forever");
+  const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=810', { 
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+  });
 
-    if (!response.ok) {
-        throw new Error("Error fetching all Pokémon from API.");
-    }
+  if (!response.ok) {
+      throw new Error("Error fetching all Pokémon from API.");
+  }
 
-    const data = await response.json();
-    // console.log(`API FETCH: all pokemon ${JSON.stringify(data)}`)
-    // data.results should be an array of { name: string; url: string; }
-    return data.results;
+  const data = await response.json();
+  // console.log(`API FETCH: all pokemon ${JSON.stringify(data)}`)
+  // data.results should be an array of { name: string; url: string; }
+  return data.results;
 }
 
 // export async function getPokemonSprite(url: string) {
