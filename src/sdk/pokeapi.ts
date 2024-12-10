@@ -1,6 +1,6 @@
 import "server-only";
-import { unstable_cacheLife } from "next/cache";
-
+import { unstable_cacheLife as cacheLife } from 'next/cache'
+ 
 interface Pokemon {
     name: string;
     url: string;
@@ -8,7 +8,7 @@ interface Pokemon {
 
 export async function getPokemonData(pokemon: Pokemon): Promise<any> {
   "use cache";
-  unstable_cacheLife("forever");
+  cacheLife('max');
 
     const response = await fetch(pokemon.url, {
         method: "GET",
@@ -29,7 +29,8 @@ export async function getPokemonData(pokemon: Pokemon): Promise<any> {
 
 export async function getAllPokemon(): Promise<Pokemon[]> {
   "use cache";
-  unstable_cacheLife("forever");
+  cacheLife('max');
+  
   const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=810', { 
       method: "GET",
       headers: {
