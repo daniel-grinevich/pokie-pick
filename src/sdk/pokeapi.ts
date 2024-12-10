@@ -15,6 +15,7 @@ export async function getPokemonData(pokemon: Pokemon): Promise<any> {
         headers: {
           "Content-Type": "application/json",
         },
+        next: { revalidate: 86400 },
     });
   
     if (!response.ok) {
@@ -29,22 +30,24 @@ export async function getPokemonData(pokemon: Pokemon): Promise<any> {
 
 export async function getAllPokemon(): Promise<Pokemon[]> {
   "use cache";
-  cacheLife('max');
+
+  console.log("Checking if all Pokémon are cached...");
   
-  const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=810', { 
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
+  const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=810', {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    next: { revalidate: 86400 }, // Cache for 1 day
   });
 
   if (!response.ok) {
-      throw new Error("Error fetching all Pokémon from API.");
+    throw new Error("Error fetching all Pokémon from API.");
   }
 
+  console.log("Fetched all Pokémon from API");
+  
   const data = await response.json();
-  // console.log(`API FETCH: all pokemon ${JSON.stringify(data)}`)
-  // data.results should be an array of { name: string; url: string; }
   return data.results;
 }
 
