@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import Image from "next/image";
 import { Suspense } from "react";
 import { recordBattle } from "./utils/vote";
+import { cookies } from "next/headers";
 
 export default function HomePage() {
   return (
@@ -79,5 +80,7 @@ async function handleVote(formData: FormData) {
  
   console.log("Voted for", winner_name);
   await recordBattle(payload); // Ensure recordBattle handles an object
-  revalidatePath("/");
+  // revalidatePath("/");
+  const jar = await cookies();
+  jar.set("currentPair", JSON.stringify("next pair"));
 }

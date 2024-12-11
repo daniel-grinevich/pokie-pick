@@ -26,8 +26,41 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        {children}
+      <body className="grid h-full w-full grid-cols-[300px_1fr]">
+        {/* Navigation */}
+        <nav className="border-r border-black h-full p-4">
+          <h1 className="text-3xl font-bold mb-4">Pokemon Picker</h1>
+          <div>
+            <h2 className="text-xl border-b border-black">Pokemon API</h2>
+            <ul className="space-y-1">
+              <li>
+                <a href="#" className="text-blue-600 hover:underline">
+                  Pokemon Picker
+                </a>
+              </li>
+              <li>
+                <a href="#" className="text-blue-600 hover:underline">
+                  Turbo Version
+                </a>
+              </li>
+              <li>
+                <a href="#" className="text-blue-600 hover:underline">
+                  Pokemon Battle
+                </a>
+              </li>
+              <li>
+                <a href="#" className="text-blue-600 hover:underline">
+                  Battle Stats
+                </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+        
+        {/* Main Content */}
+        <div className={`${geistSans.variable} ${geistMono.variable} antialiased p-4`}>
+          {children}
+        </div>
       </body>
     </html>
   );
