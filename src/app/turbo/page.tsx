@@ -63,11 +63,12 @@ async function GetPokemonVote() {
               </div>
               <div>
                 <Image
-                  src={pokemon.sprites}
-                  width={100}
-                  height={100}
-                  alt={`Image for pokemon ${pokemon.name}`}
-                  priority={true}
+                    src={pokemon.sprites}
+                    width={100}
+                    height={100}
+                    alt={`Image for pokemon ${pokemon.name}`}
+                    priority={true}
+                    placeholder="blur"
                 />
               </div>
               <input type="hidden" name="winner_id" value={pokemon.id} />
