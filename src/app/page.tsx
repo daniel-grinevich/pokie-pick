@@ -82,5 +82,5 @@ async function handleVote(formData: FormData) {
   await recordBattle(payload); // Ensure recordBattle handles an object
   // revalidatePath("/");
   const jar = await cookies();
-  jar.set("currentPair", JSON.stringify("next pair"));
+  jar.set("currentPair", JSON.stringify(Math.random()));
 }
