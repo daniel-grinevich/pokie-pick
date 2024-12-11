@@ -20,7 +20,7 @@ export const metadata = {
 export default function HomePage() {
   return (
     <div className="h-screen flex flex-col items-center justify-center">
-      <h1 className="text-3xl font-extrabold mb-4">Which one would you rather catch?</h1>
+      <h1 className="text-3xl font-extrabold mb-4">TURBO: Which one would you rather catch?</h1>
       <Suspense fallback={<div>Loading . . .</div>}>
         <GetPokemonVote />
       </Suspense>
