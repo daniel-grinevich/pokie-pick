@@ -6,6 +6,11 @@ import { Suspense } from "react";
 import { recordBattle } from "./utils/vote";
 import { cookies } from "next/headers";
 
+export const metadata = {
+  title: "Using Next Cache RSC Version",
+  description: "Implementation of pokemon api using react server components",
+};
+
 export default function HomePage() {
   return (
     <div className="h-screen flex flex-col items-center justify-center">
@@ -37,7 +42,7 @@ async function GetPokemonVote() {
             </div>
             <div>
               <Image
-                src={pokemon.sprites.front_default}
+                src={pokemon.sprites}
                 width={100}
                 height={100}
                 alt={`Image for pokemon ${pokemon.name}`}
@@ -82,5 +87,5 @@ async function handleVote(formData: FormData) {
   await recordBattle(payload); // Ensure recordBattle handles an object
   // revalidatePath("/");
   const jar = await cookies();
-  jar.set("currentPair", JSON.stringify(Math.random()));
+  jar.set("diffPair", JSON.stringify(Math.random()));
 }

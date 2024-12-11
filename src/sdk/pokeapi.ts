@@ -6,6 +6,12 @@ interface Pokemon {
     url: string;
 }
 
+interface PokemonData {
+  id: number;
+  name: string;
+  sprites: any;
+}
+
 export async function getPokemonData(pokemon: Pokemon): Promise<any> {
   "use cache";
   cacheLife('max');
@@ -25,7 +31,13 @@ export async function getPokemonData(pokemon: Pokemon): Promise<any> {
     const data = await response.json();
     // console.log(`API FETCH: detail pokemon ${JSON.stringify(data)}`)
 
-    return data;
+    const pokemonData = {
+      id: data.id,
+      name: data.name,
+      sprites: data.sprites.front_default,
+    }
+
+    return pokemonData;
   }
 
 export async function getAllPokemon(): Promise<Pokemon[]> {
