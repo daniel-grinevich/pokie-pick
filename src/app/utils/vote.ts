@@ -72,6 +72,7 @@ export const recordBattle = async (payload: BattlePayload): Promise<void> => {
     return;
 };
 
+
     // try {
     //     // Read the current stats.json file
     //     const fileContents = await fs.readFile(statsPath, 'utf-8');

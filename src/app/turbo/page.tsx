@@ -1,16 +1,14 @@
 // Import necessary modules
-import { getPokemonPair } from "@/sdk/pokeapi";
+import { getPokemonPair, getTwoRandomPokemonTurbo } from "@/sdk/pokeapi";
 import { revalidatePath } from "next/cache";
 import Image from "next/image";
 import { Suspense } from "react";
 import { recordBattle } from "@/app/utils/vote";
 import { cookies } from "next/headers";
+import PokemonSprite from "../utils/pokemon-sprite";
+import { PokemonTurbo } from "@/sdk/pokeapi";
 
-interface PokemonData {
-    id: number;
-    name: string;
-    sprites: any;
-}
+
 
 export const metadata = {
   title: "Over-Optimized Version",
@@ -37,9 +35,9 @@ async function GetPokemonVote() {
     // Fetch pairs in parallel
     const [currentPokemonPair, nextPair] = await Promise.all([
       currentPokemonPairJSON
-        ? (JSON.parse(currentPokemonPairJSON) as [PokemonData, PokemonData])
-        : getPokemonPair(),
-      getPokemonPair(),
+        ? (JSON.parse(currentPokemonPairJSON) as [PokemonTurbo, PokemonTurbo])
+        : await getTwoRandomPokemonTurbo(),
+      await getTwoRandomPokemonTurbo(),
     ]);
   
     console.log("currentPokemonPairX: ", JSON.stringify(currentPokemonPair, null, 2));
@@ -47,37 +45,51 @@ async function GetPokemonVote() {
   
     return (
       <div className="flex flex-row gap-4">
+        {/* <div className="hidden">
+          {nextPair.map((pokemon) => (
+            <PokemonSprite
+              key={pokemon.dexNumber}
+              pokemon={pokemon}
+              className="w-64 h-64"
+            />
+          ))}
+        </div> */}
         {currentPokemonPair.map((pokemon, index) => {
           const loser = currentPokemonPair[index === 0 ? 1 : 0];
           const pokemonName = pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1);
   
           return (
             <form
-              key={pokemon.id}
+              key={pokemon.dexNumber}
               action={handleVote}
               className="flex flex-col p-4 border border-black items-center w-[200px]"
             >
               <div className="flex flex-row gap-1">
-                <h2 className="font-extrabold">{pokemon.id}</h2>
+                <h2 className="font-extrabold">{pokemon.dexNumber}</h2>
                 <h2>{pokemonName}</h2>
               </div>
               <div>
-                <Image
+                {/* <Image
                     src={pokemon.sprites}
                     width={100}
                     height={100}
                     alt={`Image for pokemon ${pokemon.name}`}
                     priority={true}
-                    placeholder="blur"
-                />
+                /> */}
+                <PokemonSprite pokemon={pokemon} className="w-64 h-64" />
               </div>
-              <input type="hidden" name="winner_id" value={pokemon.id} />
+              <input type="hidden" name="winner_id" value={pokemon.dexNumber} />
               <input type="hidden" name="winner_name" value={pokemon.name} />
-              <input type="hidden" name="loser_id" value={loser.id} />
+              <input type="hidden" name="loser_id" value={loser.dexNumber} />
               <input type="hidden" name="loser_name" value={loser.name} />
               {nextPair.map((nextPokemon, index) => (
-                <div key={nextPokemon.id} className="hidden">
-                    <Image
+                <div key={nextPokemon.dexNumber} className="hidden">
+                  <PokemonSprite
+                      key={nextPokemon.dexNumber}
+                      pokemon={nextPokemon}
+                      className="w-64 h-64"
+                  />
+                    {/* <Image
                         key={nextPokemon.id}
                         src={nextPokemon.sprites}
                         alt={`Image for pokemon ${nextPokemon.name}`}
@@ -85,10 +97,10 @@ async function GetPokemonVote() {
                         height={50}
                         className="hidden" // Keep it hidden if not yet needed
                         loading="lazy" // Explicitly lazy-load the image
-                    />
-                    <input type="hidden" name={`nextPair[${index}].id`} value={nextPokemon.id} />
+                    /> */}
+
                     <input type="hidden" name={`nextPair[${index}].name`} value={nextPokemon.name} />
-                    <input type="hidden" name={`nextPair[${index}].sprites`} value={nextPokemon.sprites} />
+                    <input type="hidden" name={`nextPair[${index}].dexNumber`} value={nextPokemon.dexNumber} />
                 </div>
               ))}
               <button className="px-4 py-2 w-full bg-black text-white" type="submit">
@@ -114,25 +126,23 @@ async function handleVote(formData: FormData) {
   
     // Extract the next pair data
     for (let i = 0; i < 2; i++) {
-      const id = formData.get(`nextPair[${i}].id`) as string;
+      const dexNumber = formData.get(`nextPair[${i}].dexNumber`);
       const name = formData.get(`nextPair[${i}].name`) as string;
-      const sprites = formData.get(`nextPair[${i}].sprites`) as string;
   
-      nextPair.push({ id, name, sprites });
+      nextPair.push({ dexNumber, name });
     }
   
     console.log(`COOKIES NEXT PAIR: ${JSON.stringify(nextPair, null, 2)}`);
   
-    const payload = {
-      winner_id,
-      winner_name,
-      loser_id,
-      loser_name,
-    };
+    // const payload = {
+    //   winner_id,
+    //   winner_name,
+    //   loser_id,
+    //   loser_name,
+    // };
   
-    console.log("Voted for", winner_name);
-    await recordBattle(payload); // Ensure recordBattle handles an object
-  
+    // console.log("Voted for", winner_name);
+    recordBattle({winner_id,winner_name,loser_id,loser_name}); // Ensure recordBattle handles an object
     const jar = await cookies();
     jar.set("currentPair", JSON.stringify(nextPair)); // Store the pair as a JSON array of objects
   }
